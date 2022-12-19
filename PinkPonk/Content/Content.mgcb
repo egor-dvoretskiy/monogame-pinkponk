@@ -39,6 +39,13 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/DebugFont.spritefont
 
+#begin Fonts/PrepareStateFont.spritefont
+/importer:FontDescriptionImporter
+/processor:LocalizedFontProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/PrepareStateFont.spritefont
+
 #begin GUI/Button.png
 /importer:TextureImporter
 /processor:TextureProcessor

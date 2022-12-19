@@ -7,12 +7,14 @@
     <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/../../../../../../_pixel/pinkponk/interface/MainMenuBackground.png</File>
     <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/Fonts/ButtonFont.spritefont</File>
     <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/Fonts/DebugFont.spritefont</File>
+    <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/Fonts/PrepareStateFont.spritefont</File>
     <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/GUI/Button.png</File>
     <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/GUI/ButtonHover.png</File>
     <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/GUI/ButtonPressed.png</File>
   </SourceFiles>
   <DestFiles>
     <File>GUI/MainMenuBackground.png</File>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
