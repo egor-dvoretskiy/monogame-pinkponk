@@ -4,15 +4,15 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
+    <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/../../../../../../_pixel/pinkponk/interface/MainMenuBackground.png</File>
+    <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/Fonts/ButtonFont.spritefont</File>
     <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/Fonts/DebugFont.spritefont</File>
-    <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/GUI/ButtonQuitHover.png</File>
-    <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/GUI/ButtonQuitIdle.png</File>
-    <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/GUI/ButtonStartHover.png</File>
-    <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/GUI/ButtonStartIdle.png</File>
-    <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/GUI/MainMenuBackground.png</File>
+    <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/GUI/Button.png</File>
+    <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/GUI/ButtonHover.png</File>
+    <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/GUI/ButtonPressed.png</File>
   </SourceFiles>
   <DestFiles>
-    <File xsi:nil="true" />
+    <File>GUI/MainMenuBackground.png</File>
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

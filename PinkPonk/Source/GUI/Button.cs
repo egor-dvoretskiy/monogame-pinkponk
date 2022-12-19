@@ -12,22 +12,36 @@ namespace PinkPonk.Source.GUI
 {
     public class Button : ComponentGUI
     {
+        private readonly string _buttonContent;
+
+        private readonly SpriteFont _font;
         private readonly Texture2D _textureIdle;
         private readonly Texture2D _textureHover;
+        private readonly Texture2D _texturePressed;
 
         private MouseState currentMouseState;
         private MouseState previousMouseState;
 
         private bool isHovering;
+        private bool isPressed;
 
         private Vector2 position;
 
         public event EventHandler Click;
 
-        public Button(Texture2D textureIdle, Texture2D textureHover)
+        public Button(
+            SpriteFont font, 
+            string buttonContent, 
+            Texture2D textureIdle, 
+            Texture2D textureHover, 
+            Texture2D texturePressed
+        )
         {
+            this._font = font;
+            this._buttonContent = buttonContent;
             this._textureIdle = textureIdle;
             this._textureHover = textureHover;
+            this._texturePressed = texturePressed;
         }
 
         public override float Width
@@ -42,10 +56,22 @@ namespace PinkPonk.Source.GUI
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 vector)
         {
+            Texture2D currentTexture = this.GetTextureDueToMouseState();
+
             spriteBatch.Draw(
-                this.isHovering ? this._textureHover : this._textureIdle, 
+                currentTexture, 
                 vector, 
                 Color.White
+            );
+
+            spriteBatch.DrawString(
+                this._font,
+                this._buttonContent,
+                new Vector2(
+                    vector.X + (currentTexture.Width / 2) - (this._font.MeasureString(this._buttonContent).X / 2),
+                    vector.Y + (currentTexture.Height / 2) - (this._font.MeasureString(this._buttonContent).Y / 2)
+                ),
+                Color.Black
             );
 
             this.position = vector;
@@ -53,8 +79,6 @@ namespace PinkPonk.Source.GUI
 
         public override void Update(GameTime gameTime)
         {
-            this.isHovering = false;
-
             this.previousMouseState = this.currentMouseState;
             this.currentMouseState = Mouse.GetState();
 
@@ -69,11 +93,21 @@ namespace PinkPonk.Source.GUI
             {
                 this.isHovering = true;
 
+                if (this.currentMouseState.LeftButton == ButtonState.Pressed)
+                    this.isPressed = true;
+
                 if (this.currentMouseState.LeftButton == ButtonState.Released && this.previousMouseState.LeftButton == ButtonState.Pressed)
                 {
                     this.Click?.Invoke(this, new EventArgs());
+                    this.isPressed = false;
                 }
             }
+            else
+            {
+                this.isHovering = false;
+                this.isPressed = false;
+            }
+               
         }
 
         private bool IsBoundsCrossed(Rectangle mouseRectangle, Vector2 position)
@@ -82,6 +116,17 @@ namespace PinkPonk.Source.GUI
                 mouseRectangle.X <= position.X + this._textureIdle.Width &&
                 mouseRectangle.Y >= position.Y &&
                 mouseRectangle.Y <= position.Y + this._textureIdle.Height;
+        }
+
+        private Texture2D GetTextureDueToMouseState()
+        {
+            if (this.isPressed)
+                return this._texturePressed;
+
+            if (this.isHovering)
+                return this._textureHover;
+
+            return this._textureIdle;
         }
     }
 }

@@ -13,12 +13,12 @@ namespace PinkPonk.Source.GUI
 {
     public class MainMenu : ComponentGUI
     {
-        private readonly float _buttonOffset = 10;
+        private readonly float _buttonOffset = 40;
 
         private readonly Texture2D _texture;
 
-        private readonly Button _buttonStartGameIdle;
-        private readonly Button _buttonQuitGameIdle;
+        private readonly Button _buttonStartGame;
+        private readonly Button _buttonQuitGame;
 
         #region events
 
@@ -30,18 +30,25 @@ namespace PinkPonk.Source.GUI
         public MainMenu(ContentManager contentManager)
         {
             this._texture = contentManager.Load<Texture2D>("GUI/MainMenuBackground");
+            var font = contentManager.Load<SpriteFont>("Fonts/ButtonFont");
 
-            this._buttonStartGameIdle = new Button(
-                contentManager.Load<Texture2D>("GUI/ButtonStartIdle"),
-                contentManager.Load<Texture2D>("GUI/ButtonStartHover")
+            this._buttonStartGame = new Button(
+                font,
+                "START",
+                contentManager.Load<Texture2D>("GUI/Button"),
+                contentManager.Load<Texture2D>("GUI/ButtonHover"),
+                contentManager.Load<Texture2D>("GUI/ButtonPressed")
             );
-            this._buttonStartGameIdle.Click += ButtonStartGameIdle_Click;
+            this._buttonStartGame.Click += ButtonStartGameIdle_Click;
 
-            this._buttonQuitGameIdle = new Button(
-                contentManager.Load<Texture2D>("GUI/ButtonQuitIdle"),
-                contentManager.Load<Texture2D>("GUI/ButtonQuitHover")
+            this._buttonQuitGame = new Button(
+                font,
+                "QUIT",
+                contentManager.Load<Texture2D>("GUI/Button"),
+                contentManager.Load<Texture2D>("GUI/ButtonHover"),
+                contentManager.Load<Texture2D>("GUI/ButtonPressed")
             );
-            this._buttonQuitGameIdle.Click += ButtonQuitGameIdle_Click;
+            this._buttonQuitGame.Click += ButtonQuitGameIdle_Click;
         }
 
         public override float Width
@@ -58,29 +65,29 @@ namespace PinkPonk.Source.GUI
         {
             spriteBatch.Draw(this._texture, vector, Color.White);
 
-            this._buttonStartGameIdle.Draw(
+            this._buttonStartGame.Draw(
                 gameTime, 
                 spriteBatch, 
                 new Vector2(
-                    vector.X + this.Width / 2 - this._buttonStartGameIdle.Width / 2,
-                    vector.Y + this.Height / 2 - this._buttonStartGameIdle.Height / 2 - this._buttonOffset
+                    vector.X + this.Width / 2 - this._buttonStartGame.Width / 2,
+                    vector.Y + this.Height / 2 - this._buttonStartGame.Height / 2 - this._buttonOffset
                 )
             );
 
-            this._buttonQuitGameIdle.Draw(
+            this._buttonQuitGame.Draw(
                 gameTime, 
                 spriteBatch,
                 new Vector2(
-                    vector.X + this.Width / 2 - this._buttonQuitGameIdle.Width / 2,
-                    vector.Y + this.Height / 2 - this._buttonQuitGameIdle.Height / 2 + this._buttonOffset
+                    vector.X + this.Width / 2 - this._buttonQuitGame.Width / 2,
+                    vector.Y + this.Height / 2 - this._buttonQuitGame.Height / 2 + this._buttonOffset
                 )
             );
         }
 
         public override void Update(GameTime gameTime)
         {
-            this._buttonStartGameIdle.Update(gameTime);
-            this._buttonQuitGameIdle.Update(gameTime);
+            this._buttonStartGame.Update(gameTime);
+            this._buttonQuitGame.Update(gameTime);
         }
 
         private void ButtonQuitGameIdle_Click(object sender, EventArgs e)
