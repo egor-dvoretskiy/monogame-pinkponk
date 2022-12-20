@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using PinkPonk.Source;
 using PinkPonk.Source.Enums;
 using PinkPonk.Source.GUI;
+using PinkPonk.Source.Models;
 using System;
 using System.Timers;
 
@@ -14,6 +16,7 @@ namespace PinkPonk
 
         private SpriteBatch spriteBatch;
         private Timer prepareTimer;
+        private GameField gameField;
 
         private DateTime lastStartedTimer;
         private string elapsedTimerSecondsContent;
@@ -56,6 +59,8 @@ namespace PinkPonk
         protected override void Initialize()
         {
             this.gameState = GameState.MainMenu;
+
+            this.gameField = new GameField(this.Content, this.GraphicsDevice, this.Window.ClientBounds);
 
             #region graphics initialize
 
@@ -112,6 +117,8 @@ namespace PinkPonk
             var mouseState = Mouse.GetState();
             this.mouseCoordinates.Content = $"x: {mouseState.X}, y: {mouseState.Y}";
 
+            this.gameField.UpdateGameFieldSize(this.Window.ClientBounds);
+
             #region gamestate
 
             switch (this.gameState)
@@ -124,6 +131,24 @@ namespace PinkPonk
                 case GameState.Prepare:
                     {
                         this.elapsedTimerSecondsContent = (this.lastStartedTimer - DateTime.Now).TotalSeconds.ToString("f1");
+                    }
+                    break;
+                case GameState.Play:
+                    {
+                        this.gameField.Move();
+
+                        this.gameState = GameState.CheckEnd;
+                    }
+                    break;
+                case GameState.CheckEnd:
+                    {
+                        if (this.gameField.Score.IsGameFinished != Winner.Nobody)
+                        {
+                            this.gameState = GameState.Applauses;
+                            return;
+                        }
+
+                        this.gameState = GameState.Play;
                     }
                     break;
                 default:
@@ -146,24 +171,34 @@ namespace PinkPonk
             {
                 case GameState.MainMenu:
                     {
+                        this.backgroundColor = Color.CornflowerBlue;
+
                         this.mouseCoordinates.Draw(
                             gameTime,
                             this.spriteBatch,
-                            new Vector2(0, 0));
+                            new Rectangle(
+                                0,
+                                0,
+                                this.mouseCoordinates.Width,
+                                this.mouseCoordinates.Height
+                            )
+                        );
 
                         this.mainMenu.Draw(
                             gameTime,
                             this.spriteBatch,
-                            new Vector2(
+                            new Rectangle(
                                 Window.ClientBounds.Width / 2 - this.mainMenu.Width / 2,
-                                Window.ClientBounds.Height / 2 - this.mainMenu.Height / 2
+                                Window.ClientBounds.Height / 2 - this.mainMenu.Height / 2,
+                                this.mainMenu.Width,
+                                this.mainMenu.Height
                             )
                         );
                     }
                     break;
                 case GameState.Prepare:
                     {
-                        GraphicsDevice.Clear(Color.Black);
+                        this.backgroundColor = new Color(0x0D, 0x0D, 0x0D);
 
                         this.spriteBatch.DrawString(
                             this.prepareStateFont,
@@ -174,6 +209,31 @@ namespace PinkPonk
                             ),
                             Color.White
                         );
+                    }
+                    break;
+                case GameState.Start:
+                    {
+                        this.backgroundColor = new Color(0x0D, 0x0D, 0x0D);
+
+                        this.gameField.Draw(
+                            gameTime, 
+                            this.spriteBatch, 
+                            new Rectangle(
+                                Window.ClientBounds.Width / 2,
+                                Window.ClientBounds.Height,
+                                Window.ClientBounds.Width,
+                                Window.ClientBounds.Height
+                            )
+                        );
+
+                        this.gameState = GameState.Play;
+                    }
+                    break;
+                case GameState.CheckEnd:
+                    {
+                        this.backgroundColor = new Color(0x0D, 0x0D, 0x0D);
+
+                        this.gameField.DrawMove(gameTime, this.spriteBatch);
                     }
                     break;
                 default:

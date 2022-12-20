@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace PinkPonk.Source.GUI
 {
-    public class MainMenu : ComponentGUI
+    public class MainMenu : Component
     {
-        private readonly float _buttonOffset = 40;
+        private readonly int _buttonOffset = 40;
 
         private readonly Texture2D _texture;
 
@@ -51,35 +51,38 @@ namespace PinkPonk.Source.GUI
             this._buttonQuitGame.Click += ButtonQuitGameIdle_Click;
         }
 
-        public override float Width
+        public override int Width
         {
             get => this._texture.Width;
         }
 
-        public override float Height
+        public override int Height
         {
             get => this._texture.Height;
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 vector)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle vector)
         {
             spriteBatch.Draw(this._texture, vector, Color.White);
-
             this._buttonStartGame.Draw(
                 gameTime, 
                 spriteBatch, 
-                new Vector2(
+                new Rectangle(
                     vector.X + this.Width / 2 - this._buttonStartGame.Width / 2,
-                    vector.Y + this.Height / 2 - this._buttonStartGame.Height / 2 - this._buttonOffset
+                    vector.Y + this.Height / 2 - this._buttonStartGame.Height / 2 - this._buttonOffset,
+                    this._buttonStartGame.Width,
+                    this._buttonStartGame.Height
                 )
             );
 
             this._buttonQuitGame.Draw(
                 gameTime, 
                 spriteBatch,
-                new Vector2(
+                new Rectangle(
                     vector.X + this.Width / 2 - this._buttonQuitGame.Width / 2,
-                    vector.Y + this.Height / 2 - this._buttonQuitGame.Height / 2 + this._buttonOffset
+                    vector.Y + this.Height / 2 - this._buttonQuitGame.Height / 2 + this._buttonOffset,
+                    this._buttonQuitGame.Width,
+                    this._buttonQuitGame.Height
                 )
             );
         }

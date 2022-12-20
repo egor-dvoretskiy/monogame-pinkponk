@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace PinkPonk.Source.Enums
 {
-    public enum GameState
+    public enum Player
     {
-        MainMenu,
-        Prepare,
-        Start,
-        Play,
-        CheckEnd,
-        Applauses
+        Left,
+        Right
     }
 }

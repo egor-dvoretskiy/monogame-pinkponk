@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PinkPonk.Source.GUI
 {
-    public class MouseCoordinates : ComponentGUI
+    public class MouseCoordinates : Component
     {
         private readonly Texture2D _texture;
         private readonly SpriteFont _font;
@@ -22,23 +22,31 @@ namespace PinkPonk.Source.GUI
 
         public string Content { get; set; }
 
-        public override float Width
+        public override int Width
         {
             get => this._texture.Width;
         }
 
-        public override float Height
+        public override int Height
         {
             get => this._texture.Height;
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 vector)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle vector)
         {
             spriteBatch.Draw(this._texture, vector, Color.Orange);
 
             if (!string.IsNullOrEmpty(this.Content))
             {
-                spriteBatch.DrawString(this._font, this.Content, vector, Color.Black);
+                spriteBatch.DrawString(
+                    this._font, 
+                    this.Content, 
+                    new Vector2(
+                        vector.X,
+                        vector.Y
+                    ), 
+                    Color.Black
+                );
             }
         }
 

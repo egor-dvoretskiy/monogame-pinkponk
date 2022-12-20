@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace PinkPonk.Source.Abstract
 {
-    public abstract class ComponentGUI
+    public abstract class Component
     {
-        public abstract float Width { get; }
+        public abstract int Width { get; }
 
-        public abstract float Height { get; }
+        public abstract int Height { get; }
 
-        public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 vector);
+        public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle vector);
 
         public abstract void Update(GameTime gameTime);
     }

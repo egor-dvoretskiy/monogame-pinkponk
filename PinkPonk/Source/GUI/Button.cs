@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PinkPonk.Source.GUI
 {
-    public class Button : ComponentGUI
+    public class Button : Component
     {
         private readonly string _buttonContent;
 
@@ -44,17 +44,17 @@ namespace PinkPonk.Source.GUI
             this._texturePressed = texturePressed;
         }
 
-        public override float Width
+        public override int Width
         {
             get => this._textureIdle.Width;
         }
 
-        public override float Height
+        public override int Height
         {
             get => this._textureIdle.Height;
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 vector)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle vector)
         {
             Texture2D currentTexture = this.GetTextureDueToMouseState();
 
@@ -74,7 +74,7 @@ namespace PinkPonk.Source.GUI
                 Color.Black
             );
 
-            this.position = vector;
+            this.position = new Vector2(vector.X, vector.Y);
         }
 
         public override void Update(GameTime gameTime)
