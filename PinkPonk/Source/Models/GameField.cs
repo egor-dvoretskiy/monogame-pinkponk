@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PinkPonk.Source.Models
 {
-    public class GameField : Component
+    public class GameField
     {
         public const int PaddleOffset = 32;
 
@@ -29,8 +29,8 @@ namespace PinkPonk.Source.Models
             this._ball = new Ball(contentManager, outsideBox);
             this._paddleSet = new PaddleSet()
             {
-                PaddleLeft = new Paddle(contentManager, Enums.Player.Left, box),
-                PaddleRight = new Paddle(contentManager, Enums.Player.Right, box),
+                PaddleLeft = new Paddle(contentManager.Load<Texture2D>("Models/Paddle-left"), Enums.Player.Left, box),
+                PaddleRight = new Paddle(contentManager.Load<Texture2D>("Models/Paddle-right"), Enums.Player.Right, box),
             };
 
             this._textureDash = new Texture2D(graphicsDevice, 1, 1);
@@ -41,17 +41,17 @@ namespace PinkPonk.Source.Models
 
         public Scores Score { get; private set; }
 
-        public override int Width
+        public int Width
         {
             get => this.box.Width;
         }
 
-        public override int Height
+        public int Height
         {
             get => this.box.Height;
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle vector)
+        public void DrawStart(GameTime gameTime, SpriteBatch spriteBatch, Rectangle vector)
         {
             for (int i = 0; i < 31; i++)
             {
@@ -75,7 +75,8 @@ namespace PinkPonk.Source.Models
                     this._ball.Height
                 )
             );
-            this._paddleSet.PaddleLeft.Draw(gameTime, spriteBatch,
+
+            /*this._paddleSet.PaddleLeft.Draw(gameTime, spriteBatch,
                 new Rectangle(
                     PaddleOffset,
                     vector.Y / 2 - this._paddleSet.PaddleLeft.Height / 2,
@@ -90,20 +91,37 @@ namespace PinkPonk.Source.Models
                     this._paddleSet.PaddleLeft.Width,
                     this._paddleSet.PaddleLeft.Height
                 )
-            );
+            );*/
         }
 
         public void DrawMove(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            this._ball.Draw(gameTime, spriteBatch,
-                   new Rectangle(
-                       this._ball.Position.X - this._ball.Width / 2,
-                       this._ball.Position.Y / 2 - this._ball.Height / 2,
-                       this._ball.Width,
-                       this._ball.Height
-                   )
-               );
-            this._paddleSet.PaddleLeft.Draw(gameTime, spriteBatch,
+            for (int i = 0; i < 31; i++)
+            {
+                spriteBatch.Draw(
+                    this._textureDash,
+                    new Rectangle(
+                        this.box.Width / 2,
+                        i * this.box.Height / 31,
+                        2,
+                        this.box.Height / 62
+                    ),
+                    Color.White
+                );
+            }
+
+            this._ball.Draw(
+                gameTime, 
+                spriteBatch,
+                new Rectangle(
+                    this._ball.Position.X - this._ball.Width / 2,
+                    this._ball.Position.Y - this._ball.Height / 2,
+                    this._ball.Width,
+                    this._ball.Height
+                )
+            );
+
+            /*this._paddleSet.PaddleLeft.Draw(gameTime, spriteBatch,
                 new Rectangle(
                     PaddleOffset,
                     this._paddleSet.PaddleLeft.Position.Y / 2 - this._paddleSet.PaddleLeft.Height / 2,
@@ -118,24 +136,31 @@ namespace PinkPonk.Source.Models
                     this._paddleSet.PaddleRight.Width,
                     this._paddleSet.PaddleRight.Height
                 )
-            );
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateGameFieldSize(Rectangle rectangle)
-        {
-            this.box = rectangle;
+            );*/
         }
 
         public void Move()
         {
             var winner = this._ball.Move();
-            this.Score.SetScore(winner);
 
+            if (this.Score.SetScore(winner))
+            {
+                this._ball.ResetPosition();
+                this._ball.ResetVelocity();
+            }
+        }
+
+        public void UpdatePrepare(Rectangle rectangle)
+        {
+            this._ball.UpdateGameFieldSize(rectangle);
+            this._ball.ResetPosition();
+        }
+
+        public void UpdateGameFieldSize(Rectangle rectangle)
+        {
+            this.box = rectangle;
+
+            this._ball.UpdateGameFieldSize(rectangle);
         }
     }
 }

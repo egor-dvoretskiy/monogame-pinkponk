@@ -4,16 +4,12 @@ using Microsoft.Xna.Framework.Graphics;
 using PinkPonk.Source.Abstract;
 using PinkPonk.Source.Enums;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PinkPonk.Source.Models
 {
     public class Ball : Component
     {
-        public const int MaxVelocity = 64;
+        public const int MaxVelocity = 5;
 
         private readonly Texture2D _texture;
         private readonly Random _random;
@@ -25,12 +21,15 @@ namespace PinkPonk.Source.Models
             this._texture = contentManager.Load<Texture2D>("Models/Ball");
             this.outsideBox = box;
             this._random = new Random();
-            this.InitializeVelocity();
+
+            this.ResetVelocity();
         }
 
         public Point Position { get; private set; }
 
-        public Velocity Velocity { get; set; }
+        public Point StartPosition { get; private set; }
+
+        public Velocity Velocity { get; private set; }
 
         public override int Width
         {
@@ -44,8 +43,6 @@ namespace PinkPonk.Source.Models
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle vector)
         {
-            this.Position = new Point(vector.X, vector.Y);
-
             spriteBatch.Draw(
                 this._texture,
                 vector,
@@ -58,34 +55,32 @@ namespace PinkPonk.Source.Models
             throw new NotImplementedException();
         }
 
-        public void UpdateGameFieldSize(Rectangle rectangle)
-        {
-            this.outsideBox = rectangle;
-        }
-
         public Winner Move()
         {
             var pos = this.Position;
             pos.X += this.Velocity.X;
-            pos.Y += this.Velocity.Y;
+
+            if (pos.Y + this.Velocity.Y < 0)
+            {
+                pos.Y = 0;
+                this.ReverseVelocity(y: true);
+            }
+            else if (pos.Y + this.Height + this.Velocity.Y > this.outsideBox.Height)
+            {
+                pos.Y = this.outsideBox.Height - this.Height;
+                this.ReverseVelocity(y: true);
+            }
+            else
+                pos.Y += Velocity.Y;
+
+            this.Position = pos; // update current position of ball
+
+            // x > 800 before it draws on canvas.
 
             if (pos.X < 0)
                 return Winner.LeftSide;
             else if (pos.X + this.Width > this.outsideBox.Width)
                 return Winner.RightSide;
-
-            if (pos.Y < 0)
-            {
-                pos.Y = -pos.Y;
-                this.ReverseVelocity(y: true);
-            } 
-            else if (pos.Y + this.Height > this.outsideBox.Height)
-            {
-                pos.Y = this.outsideBox.Height - (pos.Y + this.Height - this.outsideBox.Height);
-                this.ReverseVelocity(y: true);
-            }
-
-            this.Position = pos; // update current position of ball
 
             return Winner.Nobody;
         }
@@ -102,13 +97,27 @@ namespace PinkPonk.Source.Models
             this.Velocity = vel;
         }
 
-        private void InitializeVelocity()
+        public void ResetVelocity()
         {
             this.Velocity = new Velocity()
             {
                 X = this._random.Next(0, 2) == 0 ? this._random.Next(2, 7) : -this._random.Next(2, 7),
-                Y = this._random.Next() > int.MaxValue / 2 ? this._random.Next(2, 7) : -this._random.Next(2, 7),
+                Y = this._random.Next(0, 2) == 0 ? -this._random.Next(2, 7) : this._random.Next(2, 7),
             };
+        }
+
+        public void UpdateGameFieldSize(Rectangle rectangle)
+        {
+            this.outsideBox = rectangle;
+            this.StartPosition = new Point(
+                rectangle.Width / 2 - this.Width / 2,
+                rectangle.Height / 2 - this.Height / 2
+            );
+        }
+
+        public void ResetPosition()
+        {
+            this.Position = this.StartPosition;
         }
     }
 }

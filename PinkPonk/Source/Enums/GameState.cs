@@ -12,7 +12,6 @@ namespace PinkPonk.Source.Enums
         Prepare,
         Start,
         Play,
-        CheckEnd,
-        Applauses
+        End
     }
 }

@@ -30,7 +30,7 @@ namespace PinkPonk
         #region GUI
 
         private MainMenu mainMenu;
-        private MouseCoordinates mouseCoordinates;
+        private DebugWindow debug;
 
         #endregion
 
@@ -48,9 +48,10 @@ namespace PinkPonk
 
         public PinkPonkGame()
         {
-            _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            this._graphics = new GraphicsDeviceManager(this);
+            this.TargetElapsedTime = new TimeSpan(333333);
+            this.Content.RootDirectory = "Content";
+            this.IsMouseVisible = true;
 
             this.backgroundColor = Color.CornflowerBlue;
             this.elapsedTimerSecondsContent = string.Empty;
@@ -61,6 +62,7 @@ namespace PinkPonk
             this.gameState = GameState.MainMenu;
 
             this.gameField = new GameField(this.Content, this.GraphicsDevice, this.Window.ClientBounds);
+            this.gameField.Score.OnGameFinish += Score_OnGameFinish;
 
             #region graphics initialize
 
@@ -68,6 +70,7 @@ namespace PinkPonk
             this._graphics.ApplyChanges();
 
             this.Window.AllowUserResizing = true;
+            this.Window.ClientSizeChanged += Window_ClientSizeChanged;
 
             #endregion
 
@@ -101,8 +104,8 @@ namespace PinkPonk
         {
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            this.mouseCoordinates = new MouseCoordinates(
-                new Texture2D(this.GraphicsDevice, 200, 100),
+            this.debug = new DebugWindow(
+                new Texture2D(this.GraphicsDevice, 200, 50),
                 this.Content.Load<SpriteFont>("Fonts/DebugFont")
             );
 
@@ -111,13 +114,17 @@ namespace PinkPonk
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
             var mouseState = Mouse.GetState();
-            this.mouseCoordinates.Content = $"x: {mouseState.X}, y: {mouseState.Y}";
 
-            this.gameField.UpdateGameFieldSize(this.Window.ClientBounds);
+            GraphicsDevice.Clear(this.backgroundColor);
+
+            #region debug info
+
+            this.debug.MouseCoordinates = $"x: {mouseState.X}, y: {mouseState.Y}";
+            this.debug.GameState = $"{this.gameState}";
+            this.debug.WindowBounds = $"{this.Window.ClientBounds.Width}x{this.Window.ClientBounds.Height}";
+
+            #endregion
 
             #region gamestate
 
@@ -133,22 +140,19 @@ namespace PinkPonk
                         this.elapsedTimerSecondsContent = (this.lastStartedTimer - DateTime.Now).TotalSeconds.ToString("f1");
                     }
                     break;
+                case GameState.Start:
+                    {
+                        this.gameField.UpdatePrepare(this.Window.ClientBounds);
+                    }
+                    break;
                 case GameState.Play:
                     {
                         this.gameField.Move();
-
-                        this.gameState = GameState.CheckEnd;
                     }
                     break;
-                case GameState.CheckEnd:
+                case GameState.End:
                     {
-                        if (this.gameField.Score.IsGameFinished != Winner.Nobody)
-                        {
-                            this.gameState = GameState.Applauses;
-                            return;
-                        }
-
-                        this.gameState = GameState.Play;
+                        this.gameState = GameState.MainMenu;
                     }
                     break;
                 default:
@@ -162,8 +166,6 @@ namespace PinkPonk
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(this.backgroundColor);
-
             this.spriteBatch.Begin();
             #region gamestate
 
@@ -172,17 +174,6 @@ namespace PinkPonk
                 case GameState.MainMenu:
                     {
                         this.backgroundColor = Color.CornflowerBlue;
-
-                        this.mouseCoordinates.Draw(
-                            gameTime,
-                            this.spriteBatch,
-                            new Rectangle(
-                                0,
-                                0,
-                                this.mouseCoordinates.Width,
-                                this.mouseCoordinates.Height
-                            )
-                        );
 
                         this.mainMenu.Draw(
                             gameTime,
@@ -215,7 +206,7 @@ namespace PinkPonk
                     {
                         this.backgroundColor = new Color(0x0D, 0x0D, 0x0D);
 
-                        this.gameField.Draw(
+                        this.gameField.DrawStart(
                             gameTime, 
                             this.spriteBatch, 
                             new Rectangle(
@@ -229,16 +220,31 @@ namespace PinkPonk
                         this.gameState = GameState.Play;
                     }
                     break;
-                case GameState.CheckEnd:
+                case GameState.Play:
                     {
                         this.backgroundColor = new Color(0x0D, 0x0D, 0x0D);
 
                         this.gameField.DrawMove(gameTime, this.spriteBatch);
                     }
                     break;
+                case GameState.End:
+                    {
+                    }
+                    break;
                 default:
                     break;
             }
+
+            this.debug.Draw(
+                gameTime,
+                this.spriteBatch,
+                new Rectangle(
+                    0,
+                    0,
+                    this.debug.Width,
+                    this.debug.Height
+                )
+            );
 
             #endregion
             this.spriteBatch.End();
@@ -262,6 +268,19 @@ namespace PinkPonk
         private void PrepareTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             this.gameState = GameState.Start;
+        }
+
+        private void Score_OnGameFinish(Winner winner)
+        {
+            this.gameState = GameState.End;
+        }
+
+        private void Window_ClientSizeChanged(object sender, EventArgs e)
+        {
+            if (this.gameField is null)
+                return;
+
+            this.gameField.UpdateGameFieldSize(this.Window.ClientBounds);
         }
     }
 }

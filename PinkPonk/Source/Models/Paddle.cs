@@ -20,9 +20,9 @@ namespace PinkPonk.Source.Models
 
         private Rectangle outsideBox;
 
-        public Paddle(ContentManager contentManager, Player player, Rectangle box)
+        public Paddle(Texture2D texture, Player player, Rectangle box)
         {
-            this._texture = contentManager.Load<Texture2D>("Models/Paddle");
+            this._texture = texture;
             this._player = player;
             this.outsideBox = box;
         }
