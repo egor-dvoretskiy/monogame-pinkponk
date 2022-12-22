@@ -55,6 +55,29 @@ namespace PinkPonk.Source.Models
             throw new NotImplementedException();
         }
 
+        public void SetPosition(Point point)
+        {
+            this.Position = point;
+        }
+
+        public void IncreaseVelocity(int? x = null, int? y = null)
+        {
+            var vel = this.Velocity;
+
+            if (x != null)
+                vel.X += (int)x;
+            if (y != null)
+                vel.Y += (int)y;
+
+            // cap ball speed
+            if (Math.Abs(this.Velocity.X) > MaxVelocity)
+                vel.X = Math.Sign(vel.X) * MaxVelocity;
+            if (Math.Abs(Velocity.Y) > MaxVelocity)
+                vel.Y = Math.Sign(vel.Y) * MaxVelocity;
+
+            this.Velocity = vel;
+        }
+
         public Winner Move()
         {
             var pos = this.Position;

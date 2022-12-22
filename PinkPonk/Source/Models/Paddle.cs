@@ -64,9 +64,34 @@ namespace PinkPonk.Source.Models
             );
         }
 
-        public void Move(Ball ball)
+        public bool CollisionCheck(Ball ball)
         {
+            if (!this.IsBallAbleToBeHit(ball))
+                return false;
 
+            (float delta, bool wayPastPaddle) = this.FindDeltaInBallMovement(ball);
+
+            if (wayPastPaddle)
+                return false;
+
+            float deltaTime = delta / ball.Velocity.X;
+            int collY = (int)(ball.Position.Y - ball.Velocity.Y * deltaTime);
+            int collX = (int)(ball.Position.X - ball.Velocity.X * deltaTime);
+
+            if (this.PaddleCheck(collX, collY, ball))
+            {
+                ball.SetPosition(new Point(collX, collY));
+
+                var diffY = (collY + ball.Height / 2) - (this.Position.Y + this.Height / 2);
+                diffY /= this.Height / 8;
+                diffY -= Math.Sign(diffY);
+
+                ball.IncreaseVelocity(Math.Sign(ball.Velocity.X), diffY);
+                ball.ReverseVelocity(true);
+
+                return true;
+            }
+            return false;
         }
 
         public void ResetPosition()
@@ -104,28 +129,44 @@ namespace PinkPonk.Source.Models
             this.Position = pos;
         }
 
-        /*private bool IsBallAbleToBeHit(Ball ball)
+        private (float, bool) FindDeltaInBallMovement(Ball ball)
+        {
+            float delta;
+            bool wayPastPaddle;
+            if (this._player == Player.Right)
+            {
+                delta = ball.Position.X + ball.Width - this.Position.X;
+                wayPastPaddle = delta > ball.Velocity.X + ball.Width;
+                return (delta, wayPastPaddle);
+            }
+
+            delta = ball.Position.X - (this.Position.X + this.Width);
+            wayPastPaddle = delta < ball.Velocity.X;
+            return (delta, wayPastPaddle);
+        }
+
+        private bool IsBallAbleToBeHit(Ball ball)
         {
             bool directionCheck;
             bool distanceCheck;
-            if (this._player == Player.Left)
+            if (this._player == Player.Right)
             {
                 directionCheck = ball.Velocity.X > 0;
-                distanceCheck = ball.Position.X + ball.Width > this.Box.X;
-                return directionCheck & distanceCheck;
+                distanceCheck = ball.Position.X + ball.Width > this.Position.X;
+                return directionCheck && distanceCheck;
             }
 
             directionCheck = ball.Velocity.X < 0;
-            distanceCheck = ball.Box.X < this.Box.X + this.Box.Width;
-            return directionCheck & distanceCheck;
+            distanceCheck = ball.Position.X < this.Position.X + this.Width;
+            return directionCheck && distanceCheck;
         }
 
         private bool PaddleCheck(int x, int y, Ball ball)
         {
-            return x <= this.Box.X + this.Box.Width &&
-                x + ball.Box.Width >= this.Box.X &&
-                y <= this.Box.Y + this.Box.Height &&
-                y + ball.Box.Height >= this.Box.Y;
-        }*/
+            return x <= this.Position.X + this.Width &&
+                x + ball.Width >= this.Position.X &&
+                y <= this.Position.Y + this.Height &&
+                y + ball.Height >= this.Position.Y;
+        }
     }
 }

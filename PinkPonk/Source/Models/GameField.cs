@@ -151,6 +151,14 @@ namespace PinkPonk.Source.Models
 
             this._paddleSet.PaddleLeft.AIMove(this._ball);
             this._paddleSet.PaddleRight.AIMove(this._ball);
+
+            var hit1 = this._paddleSet.PaddleLeft.CollisionCheck(this._ball);
+            var hit2 = this._paddleSet.PaddleRight.CollisionCheck(this._ball);
+
+            if (hit1 || hit2)
+            {
+                _ = 3;
+            }
         }
 
         public void UpdatePrepare(Rectangle rectangle)
