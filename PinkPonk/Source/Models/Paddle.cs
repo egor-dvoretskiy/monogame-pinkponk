@@ -13,7 +13,7 @@ namespace PinkPonk.Source.Models
 {
     public class Paddle : Component
     {
-        public static int AiPaddleSpeed = 4;
+        public static int AiPaddleSpeed = 6;
 
         private readonly Texture2D _texture;
         private readonly Player _player;
@@ -29,6 +29,8 @@ namespace PinkPonk.Source.Models
 
         public Point Position { get; set; }
 
+        public Point StartPosition { get; private set; }
+
         public override int Width
         {
             get => this._texture.Width;
@@ -41,8 +43,6 @@ namespace PinkPonk.Source.Models
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle vector)
         {
-            this.Position = new Point(vector.X, vector.Y);
-
             spriteBatch.Draw(
                 this._texture,
                 vector,
@@ -55,14 +55,23 @@ namespace PinkPonk.Source.Models
             throw new NotImplementedException();
         }
 
-        public void UpdateGameFieldSize(Rectangle rectangle)
+        public void UpdateGameFieldSize(Rectangle rectangle, int paddleXPosition)
         {
             this.outsideBox = rectangle;
+            this.StartPosition = new Point(
+                paddleXPosition,
+                rectangle.Height / 2 - this.Height / 2
+            );
         }
 
         public void Move(Ball ball)
         {
 
+        }
+
+        public void ResetPosition()
+        {
+            this.Position = this.StartPosition;
         }
 
         public void AIMove(Ball ball)
@@ -87,10 +96,10 @@ namespace PinkPonk.Source.Models
 
         private void FixBounds(Point pos)
         {
-            if (pos.Y < this.Height)
-                pos.Y = this.Height;
-            if (pos.Y + this.Height > this.outsideBox.Height)
-                pos.Y = this.outsideBox.Height - this.Height;
+            if (pos.Y < this.Height / 2)
+                pos.Y = this.Height / 2;
+            if (pos.Y + this.Height > this.outsideBox.Height - this.Height / 2)
+                pos.Y = this.outsideBox.Height - 3 * this.Height / 2;
 
             this.Position = pos;
         }

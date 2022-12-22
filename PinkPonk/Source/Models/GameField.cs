@@ -76,7 +76,7 @@ namespace PinkPonk.Source.Models
                 )
             );
 
-            /*this._paddleSet.PaddleLeft.Draw(gameTime, spriteBatch,
+            this._paddleSet.PaddleLeft.Draw(gameTime, spriteBatch,
                 new Rectangle(
                     PaddleOffset,
                     vector.Y / 2 - this._paddleSet.PaddleLeft.Height / 2,
@@ -86,12 +86,12 @@ namespace PinkPonk.Source.Models
             );
             this._paddleSet.PaddleRight.Draw(gameTime, spriteBatch,
                 new Rectangle(
-                    vector.X * 2 - PaddleOffset,
-                    vector.Y / 2 - this._paddleSet.PaddleLeft.Height / 2,
-                    this._paddleSet.PaddleLeft.Width,
-                    this._paddleSet.PaddleLeft.Height
+                    vector.X * 2 - PaddleOffset - this._paddleSet.PaddleRight.Width,
+                    vector.Y / 2 - this._paddleSet.PaddleRight.Height / 2,
+                    this._paddleSet.PaddleRight.Width,
+                    this._paddleSet.PaddleRight.Height
                 )
-            );*/
+            );
         }
 
         public void DrawMove(GameTime gameTime, SpriteBatch spriteBatch)
@@ -121,22 +121,22 @@ namespace PinkPonk.Source.Models
                 )
             );
 
-            /*this._paddleSet.PaddleLeft.Draw(gameTime, spriteBatch,
+            this._paddleSet.PaddleLeft.Draw(gameTime, spriteBatch,
                 new Rectangle(
                     PaddleOffset,
-                    this._paddleSet.PaddleLeft.Position.Y / 2 - this._paddleSet.PaddleLeft.Height / 2,
+                    this._paddleSet.PaddleLeft.Position.Y,
                     this._paddleSet.PaddleLeft.Width,
                     this._paddleSet.PaddleLeft.Height
                 )
             );
             this._paddleSet.PaddleRight.Draw(gameTime, spriteBatch,
                 new Rectangle(
-                    this._paddleSet.PaddleRight.Position.X * 2 - PaddleOffset,
-                    this._paddleSet.PaddleRight.Position.Y / 2 - this._paddleSet.PaddleRight.Height / 2,
+                    this.box.Width - PaddleOffset - this._paddleSet.PaddleRight.Width,
+                    this._paddleSet.PaddleRight.Position.Y,
                     this._paddleSet.PaddleRight.Width,
                     this._paddleSet.PaddleRight.Height
                 )
-            );*/
+            );
         }
 
         public void Move()
@@ -148,12 +148,21 @@ namespace PinkPonk.Source.Models
                 this._ball.ResetPosition();
                 this._ball.ResetVelocity();
             }
+
+            this._paddleSet.PaddleLeft.AIMove(this._ball);
+            this._paddleSet.PaddleRight.AIMove(this._ball);
         }
 
         public void UpdatePrepare(Rectangle rectangle)
         {
             this._ball.UpdateGameFieldSize(rectangle);
             this._ball.ResetPosition();
+
+            this._paddleSet.PaddleLeft.UpdateGameFieldSize(rectangle, PaddleOffset);
+            this._paddleSet.PaddleLeft.ResetPosition();
+
+            this._paddleSet.PaddleRight.UpdateGameFieldSize(rectangle, rectangle.Width - PaddleOffset);
+            this._paddleSet.PaddleRight.ResetPosition();
         }
 
         public void UpdateGameFieldSize(Rectangle rectangle)

@@ -69,7 +69,7 @@ namespace PinkPonk
             this._graphics.IsFullScreen = false;
             this._graphics.ApplyChanges();
 
-            this.Window.AllowUserResizing = true;
+            this.Window.AllowUserResizing = false;
             this.Window.ClientSizeChanged += Window_ClientSizeChanged;
 
             #endregion
