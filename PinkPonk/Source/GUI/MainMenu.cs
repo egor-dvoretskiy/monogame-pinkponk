@@ -19,12 +19,10 @@ namespace PinkPonk.Source.GUI
 
         private readonly Button _buttonStartGame;
         private readonly Button _buttonQuitGame;
-        private readonly Button _buttonSettings;
 
         #region events
 
         public event EventHandler OnStartGame;
-        public event EventHandler OnSettings;
         public event EventHandler OnQuitGame;
 
         #endregion
@@ -42,15 +40,6 @@ namespace PinkPonk.Source.GUI
                 contentManager.Load<Texture2D>("GUI/ButtonPressed")
             );
             this._buttonStartGame.Click += ButtonStartGameIdle_Click;
-
-            this._buttonSettings = new Button(
-                font,
-                "SETTINGS",
-                contentManager.Load<Texture2D>("GUI/Button"),
-                contentManager.Load<Texture2D>("GUI/ButtonHover"),
-                contentManager.Load<Texture2D>("GUI/ButtonPressed")
-            );
-            this._buttonSettings.Click += ButtonSettings_Click;
 
             this._buttonQuitGame = new Button(
                 font,
@@ -81,20 +70,9 @@ namespace PinkPonk.Source.GUI
                 spriteBatch, 
                 new Rectangle(
                     vector.X + this.Width / 2 - this._buttonStartGame.Width / 2,
-                    vector.Y + this.Height / 2 - this._buttonStartGame.Height / 2 - this._buttonOffset * 2,
+                    vector.Y + this.Height / 2 - this._buttonStartGame.Height / 2 - this._buttonOffset,
                     this._buttonStartGame.Width,
                     this._buttonStartGame.Height
-                )
-            );
-
-            this._buttonSettings.Draw(
-                gameTime, 
-                spriteBatch, 
-                new Rectangle(
-                    vector.X + this.Width / 2 - this._buttonSettings.Width / 2,
-                    vector.Y + this.Height / 2 - this._buttonSettings.Height / 2,
-                    this._buttonSettings.Width,
-                    this._buttonSettings.Height
                 )
             );
 
@@ -103,7 +81,7 @@ namespace PinkPonk.Source.GUI
                 spriteBatch,
                 new Rectangle(
                     vector.X + this.Width / 2 - this._buttonQuitGame.Width / 2,
-                    vector.Y + this.Height / 2 - this._buttonQuitGame.Height / 2 + this._buttonOffset * 2,
+                    vector.Y + this.Height / 2 - this._buttonQuitGame.Height / 2 + this._buttonOffset,
                     this._buttonQuitGame.Width,
                     this._buttonQuitGame.Height
                 )
@@ -113,7 +91,6 @@ namespace PinkPonk.Source.GUI
         public override void Update(GameTime gameTime)
         {
             this._buttonStartGame.Update(gameTime);
-            this._buttonSettings.Update(gameTime);
             this._buttonQuitGame.Update(gameTime);
         }
 
@@ -125,11 +102,6 @@ namespace PinkPonk.Source.GUI
         private void ButtonStartGameIdle_Click(object sender, EventArgs e)
         {
             this.OnStartGame?.Invoke(this, new EventArgs());
-        }
-
-        private void ButtonSettings_Click(object sender, EventArgs e)
-        {
-            this.OnSettings?.Invoke(this, new EventArgs());
         }
     }
 }

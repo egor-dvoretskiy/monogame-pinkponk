@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using PinkPonk.Source.Abstract;
 using PinkPonk.Source.Enums;
 using System;
@@ -24,6 +25,7 @@ namespace PinkPonk.Source.Models
         private readonly Vector2 _scoreOffset = new Vector2(64, 16);
 
         private Rectangle box;
+        private int previousY;
 
         public GameField(ContentManager contentManager, GraphicsDevice graphicsDevice, Rectangle outsideBox)
         {
@@ -158,7 +160,12 @@ namespace PinkPonk.Source.Models
                 this._ball.ResetVelocity();
             }
 
-            this._paddleSet.PaddleLeft.AIMove(this._ball);
+            var mouseState = Mouse.GetState();
+            var deltaY = mouseState.Y - this.previousY;
+            this.previousY = mouseState.Y;
+
+            //this._paddleSet.PaddleLeft.AIMove(this._ball);
+            this._paddleSet.PaddleLeft.PlayerMove(deltaY);
             this._paddleSet.PaddleRight.AIMove(this._ball);
 
             var hit1 = this._paddleSet.PaddleLeft.CollisionCheck(this._ball);

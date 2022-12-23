@@ -4,16 +4,16 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>D:/_workspace_C++/Cs/pink-ponk/PinkPonk/Content/Fonts/ButtonFont.spritefont</File>
-    <File>D:/_workspace_C++/Cs/pink-ponk/PinkPonk/Content/Fonts/DebugFont.spritefont</File>
-    <File>D:/_workspace_C++/Cs/pink-ponk/PinkPonk/Content/Fonts/PrepareStateFont.spritefont</File>
-    <File>D:/_workspace_C++/Cs/pink-ponk/PinkPonk/Content/GUI/Button.png</File>
-    <File>D:/_workspace_C++/Cs/pink-ponk/PinkPonk/Content/GUI/ButtonHover.png</File>
-    <File>D:/_workspace_C++/Cs/pink-ponk/PinkPonk/Content/GUI/ButtonPressed.png</File>
-    <File>D:/_workspace_C++/Cs/pink-ponk/PinkPonk/Content/GUI/MainMenuBackground.png</File>
-    <File>D:/_workspace_C++/Cs/pink-ponk/PinkPonk/Content/Models/Ball.png</File>
-    <File>D:/_workspace_C++/Cs/pink-ponk/PinkPonk/Content/Models/Paddle-left.png</File>
-    <File>D:/_workspace_C++/Cs/pink-ponk/PinkPonk/Content/Models/Paddle-right.png</File>
+    <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/Fonts/ButtonFont.spritefont</File>
+    <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/Fonts/DebugFont.spritefont</File>
+    <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/Fonts/PrepareStateFont.spritefont</File>
+    <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/GUI/Button.png</File>
+    <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/GUI/ButtonHover.png</File>
+    <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/GUI/ButtonPressed.png</File>
+    <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/GUI/MainMenuBackground.png</File>
+    <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/Models/Ball.png</File>
+    <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/Models/Paddle-left.png</File>
+    <File>C:/work/_workspace_C#/Monogame/OwnPinkPonk/PinkPonkSolution/PinkPonk/Content/Models/Paddle-right.png</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />
