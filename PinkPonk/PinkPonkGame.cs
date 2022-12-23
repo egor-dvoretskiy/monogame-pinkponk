@@ -152,7 +152,8 @@ namespace PinkPonk
                     break;
                 case GameState.End:
                     {
-                        this.gameState = GameState.MainMenu;
+                        if (mouseState.LeftButton == ButtonState.Pressed)
+                            this.gameState = GameState.MainMenu;
                     }
                     break;
                 default:
@@ -229,6 +230,7 @@ namespace PinkPonk
                     break;
                 case GameState.End:
                     {
+                        this.gameField.DrawEnd(this.spriteBatch);
                     }
                     break;
                 default:
@@ -270,7 +272,7 @@ namespace PinkPonk
             this.gameState = GameState.Start;
         }
 
-        private void Score_OnGameFinish(Winner winner)
+        private void Score_OnGameFinish()
         {
             this.gameState = GameState.End;
         }

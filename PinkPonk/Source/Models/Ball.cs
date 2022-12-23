@@ -124,8 +124,8 @@ namespace PinkPonk.Source.Models
         {
             this.Velocity = new Velocity()
             {
-                X = this._random.Next(0, 2) == 0 ? this._random.Next(2, 7) : -this._random.Next(2, 7),
-                Y = this._random.Next(0, 2) == 0 ? -this._random.Next(2, 7) : this._random.Next(2, 7),
+                X = this._random.Next(0, 2) == 0 ? this._random.Next(2, 12) : -this._random.Next(2, 12),
+                Y = this._random.Next(0, 2) == 0 ? -this._random.Next(2, 12) : this._random.Next(2, 12),
             };
         }
 

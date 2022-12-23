@@ -11,30 +11,38 @@ namespace PinkPonk.Source.Models
     {
         public const int MaximumGameScore = 4;
 
-        public delegate void WinnerHandler(Winner winner);
+        public delegate void GameFinishHandler();
 
-        public event WinnerHandler OnGameFinish;
+        public event GameFinishHandler OnGameFinish;
 
         public int LeftScore { get; set; }
 
         public int RightScore { get; set; }
+
+        public Winner Winner { get; private set; }
 
         public bool SetScore(Winner winner)
         {
             switch (winner)
             {
                 case Winner.LeftSide:
-                    this.LeftScore++;
-
-                    if (this.LeftScore >= MaximumGameScore)
-                        this.OnGameFinish?.Invoke(Winner.LeftSide);
-
-                    return true;
-                case Winner.RightSide:
                     this.RightScore++;
 
                     if (this.RightScore >= MaximumGameScore)
-                        this.OnGameFinish?.Invoke(Winner.RightSide);
+                    {
+                        this.Winner = Winner.RightSide;
+                        this.OnGameFinish?.Invoke();
+                    }
+
+                    return true;
+                case Winner.RightSide:
+                    this.LeftScore++;
+
+                    if (this.LeftScore >= MaximumGameScore)
+                    {
+                        this.Winner = Winner.LeftSide;
+                        this.OnGameFinish?.Invoke();
+                    }
 
                     return true;
                 default:

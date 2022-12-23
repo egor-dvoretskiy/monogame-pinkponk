@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using PinkPonk.Source.Abstract;
+using PinkPonk.Source.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,9 @@ namespace PinkPonk.Source.Models
         private readonly PaddleSet _paddleSet;
         private readonly GraphicsDevice _graphicsDevice;
         private readonly Texture2D _textureDash;
+        private readonly SpriteFont _scoreFont;
+
+        private readonly Vector2 _scoreOffset = new Vector2(64, 16);
 
         private Rectangle box;
 
@@ -32,6 +36,7 @@ namespace PinkPonk.Source.Models
                 PaddleLeft = new Paddle(contentManager.Load<Texture2D>("Models/Paddle-left"), Enums.Player.Left, box),
                 PaddleRight = new Paddle(contentManager.Load<Texture2D>("Models/Paddle-right"), Enums.Player.Right, box),
             };
+            this._scoreFont = contentManager.Load<SpriteFont>("Fonts/ButtonFont");
 
             this._textureDash = new Texture2D(graphicsDevice, 1, 1);
             this._textureDash.SetData(new Color[] { Color.White });
@@ -92,6 +97,8 @@ namespace PinkPonk.Source.Models
                     this._paddleSet.PaddleRight.Height
                 )
             );
+
+            this.DrawScore(spriteBatch);
         }
 
         public void DrawMove(GameTime gameTime, SpriteBatch spriteBatch)
@@ -137,6 +144,8 @@ namespace PinkPonk.Source.Models
                     this._paddleSet.PaddleRight.Height
                 )
             );
+
+            this.DrawScore(spriteBatch);
         }
 
         public void Move()
@@ -178,6 +187,44 @@ namespace PinkPonk.Source.Models
             this.box = rectangle;
 
             this._ball.UpdateGameFieldSize(rectangle);
+        }
+
+        public void DrawEnd(SpriteBatch spriteBatch)
+        {
+            string winString = $"{this.Score.Winner} wins!";
+
+            spriteBatch.DrawString(
+                this._scoreFont,
+                winString,
+                new Vector2(
+                    this.Width / 2 - this._scoreFont.MeasureString(winString).X / 2,
+                    this.Height / 2 - this._scoreFont.MeasureString(winString).Y / 2
+                ),
+                Color.White
+            );
+        }
+
+        private void DrawScore(SpriteBatch spriteBatch)
+        {
+            spriteBatch.DrawString(
+                this._scoreFont,
+                this.Score.LeftScore.ToString(),
+                new Vector2(
+                    this.Width / 2 - this._scoreOffset.X - this._scoreFont.MeasureString(this.Score.LeftScore.ToString()).X,
+                    this._scoreOffset.Y
+                ),
+                Color.White
+            );
+
+            spriteBatch.DrawString(
+                this._scoreFont,
+                this.Score.RightScore.ToString(),
+                new Vector2(
+                    this.Width / 2 + this._scoreOffset.X,
+                    this._scoreOffset.Y
+                ),
+                Color.White
+            );
         }
     }
 }
