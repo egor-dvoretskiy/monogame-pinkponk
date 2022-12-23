@@ -82,19 +82,18 @@ namespace PinkPonk.Source.Models
         {
             var pos = this.Position;
             pos.X += this.Velocity.X;
+            pos.Y += Velocity.Y;
 
-            if (pos.Y + this.Velocity.Y < 0)
+            if (pos.Y < 0 && this.Velocity.Y < 0)
             {
-                pos.Y = 0;
+                pos.Y = this.Height / 2;
                 this.ReverseVelocity(y: true);
             }
-            else if (pos.Y + this.Height + this.Velocity.Y > this.outsideBox.Height)
+            else if (pos.Y + this.Height > this.outsideBox.Height && this.Velocity.Y > 0)
             {
-                pos.Y = this.outsideBox.Height - this.Height;
+                pos.Y = this.outsideBox.Height - this.Height / 2;
                 this.ReverseVelocity(y: true);
             }
-            else
-                pos.Y += Velocity.Y;
 
             this.Position = pos; // update current position of ball
 

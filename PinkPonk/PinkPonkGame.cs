@@ -13,6 +13,7 @@ namespace PinkPonk
     public class PinkPonkGame : Game
     {
         private readonly GraphicsDeviceManager _graphics;
+        private readonly FpsCounter _fpsCounter;
 
         private SpriteBatch spriteBatch;
         private Timer prepareTimer;
@@ -20,6 +21,7 @@ namespace PinkPonk
 
         private DateTime lastStartedTimer;
         private string elapsedTimerSecondsContent;
+        private int currentFps;
 
         #region enums
 
@@ -49,7 +51,9 @@ namespace PinkPonk
         public PinkPonkGame()
         {
             this._graphics = new GraphicsDeviceManager(this);
-            this.TargetElapsedTime = new TimeSpan(333333);
+            this._fpsCounter = new FpsCounter();
+            this.IsFixedTimeStep = true;
+            this.TargetElapsedTime = TimeSpan.FromSeconds(1 / 60.0f);
             this.Content.RootDirectory = "Content";
             this.IsMouseVisible = true;
 
@@ -63,6 +67,7 @@ namespace PinkPonk
 
             this.gameField = new GameField(this.Content, this.GraphicsDevice, this.Window.ClientBounds);
             this.gameField.Score.OnGameFinish += Score_OnGameFinish;
+            this._fpsCounter.OnFpsCounted += FpsCounter_OnFpsCounted;
 
             #region graphics initialize
 
@@ -95,6 +100,8 @@ namespace PinkPonk
             this.prepareTimer.Interval = 3000;
             this.prepareTimer.Elapsed += PrepareTimer_Elapsed;
 
+            this._fpsCounter.Run();
+
             #endregion
 
             base.Initialize();
@@ -105,7 +112,7 @@ namespace PinkPonk
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
 
             this.debug = new DebugWindow(
-                new Texture2D(this.GraphicsDevice, 200, 50),
+                new Texture2D(this.GraphicsDevice, 250, 50),
                 this.Content.Load<SpriteFont>("Fonts/DebugFont")
             );
 
@@ -115,14 +122,16 @@ namespace PinkPonk
         protected override void Update(GameTime gameTime)
         {
             var mouseState = Mouse.GetState();
+            this._fpsCounter.Iterate();
 
             GraphicsDevice.Clear(this.backgroundColor);
 
             #region debug info
 
-            this.debug.MouseCoordinates = $"x: {mouseState.X}, y: {mouseState.Y}";
-            this.debug.GameState = $"{this.gameState}";
-            this.debug.WindowBounds = $"{this.Window.ClientBounds.Width}x{this.Window.ClientBounds.Height}";
+            this.debug.MouseCoordinates = $"Mouse x: {mouseState.X}, y: {mouseState.Y}";
+            this.debug.GameState = $"Game State: {this.gameState}";
+            this.debug.WindowBounds = $"Window: {this.Window.ClientBounds.Width}x{this.Window.ClientBounds.Height}";
+            this.debug.CurrentFps = $"fps: {this.currentFps}";
 
             #endregion
 
@@ -208,8 +217,8 @@ namespace PinkPonk
                         this.backgroundColor = new Color(0x0D, 0x0D, 0x0D);
 
                         this.gameField.DrawStart(
-                            gameTime, 
-                            this.spriteBatch, 
+                            gameTime,
+                            this.spriteBatch,
                             new Rectangle(
                                 Window.ClientBounds.Width / 2,
                                 Window.ClientBounds.Height,
@@ -283,6 +292,11 @@ namespace PinkPonk
                 return;
 
             this.gameField.UpdateGameFieldSize(this.Window.ClientBounds);
+        }
+
+        private void FpsCounter_OnFpsCounted(int fpsCount)
+        {
+            this.currentFps = fpsCount;
         }
     }
 }

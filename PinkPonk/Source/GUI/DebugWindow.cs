@@ -26,6 +26,8 @@ namespace PinkPonk.Source.GUI
 
         public string WindowBounds { get; set; }
 
+        public string CurrentFps { get; set; }
+
         public override int Width
         {
             get => this._texture.Width;
@@ -66,6 +68,16 @@ namespace PinkPonk.Source.GUI
                     new Vector2(
                         (vector.X + this.Width) / 2 - this._font.MeasureString(this.WindowBounds).X / 2,
                         (vector.Y + this.Height) / 2 - this._font.MeasureString(this.WindowBounds).Y / 2 + 40
+                    ), 
+                    Color.White
+                );
+
+                spriteBatch.DrawString(
+                    this._font, 
+                    this.CurrentFps, 
+                    new Vector2(
+                        (vector.X + this.Width) / 2 - this._font.MeasureString(this.CurrentFps).X / 2,
+                        (vector.Y + this.Height) / 2 - this._font.MeasureString(this.CurrentFps).Y / 2 + 60
                     ), 
                     Color.White
                 );
