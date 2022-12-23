@@ -144,6 +144,11 @@ namespace PinkPonk
                         this.mainMenu.Update(gameTime);
                     }
                     break;
+                case GameState.Settings:
+                    {
+
+                    }
+                    break;
                 case GameState.Prepare:
                     {
                         this.elapsedTimerSecondsContent = (this.lastStartedTimer - DateTime.Now).TotalSeconds.ToString("f1");
@@ -195,6 +200,11 @@ namespace PinkPonk
                                 this.mainMenu.Height
                             )
                         );
+                    }
+                    break;
+                case GameState.Settings:
+                    {
+
                     }
                     break;
                 case GameState.Prepare:

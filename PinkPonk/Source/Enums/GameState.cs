@@ -9,6 +9,7 @@ namespace PinkPonk.Source.Enums
     public enum GameState
     {
         MainMenu,
+        Settings,
         Prepare,
         Start,
         Play,
